@@ -43,6 +43,7 @@ class Consumer:
 
     def store_in_dynamodb(self, widget_request):
         table = self.dynamodb.Table(self.dynamodb_table)
+        widget_request['id'] = str(widget_request['widgetId'])
         try:
             table.put_item(Item=widget_request)
         except Exception as e:
