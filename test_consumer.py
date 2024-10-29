@@ -120,15 +120,6 @@ class TestConsumer(unittest.TestCase):
         }
 
         self.consumer.store_in_dynamodb(widget_request)
-
-        expected_item = {
-            "id": "1",
-            "widgetId": "1",
-            "owner": "test_owner",
-            "label": "Test Widget",
-            "description": "This is a test widget",
-            "color": "blue"
-        }
         table = self.consumer.dynamodb.Table('widgets') 
         object = table.get_item(Key={'id': "1"})
         self.assertEqual(object['ResponseMetadata']['HTTPStatusCode'], 200)
