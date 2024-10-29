@@ -18,7 +18,13 @@ class Consumer:
         response = self.s3.list_objects_v2(Bucket=self.bucket_input)
         if 'Contents' in response:
             for widget in response['Contents']:
-                return widget
+                key = widget['Key']
+                response2 = self.s3.get_object(Bucket=self.bucket_input, Key=key)
+                content = response2['Body'].read().decode('utf-8')
+                widget_request = json.loads(content)
+                if widget_request['type'] == 'create':
+                    self.create_request(widget_request)
+                
         return None
 
     def create_request(self, widget_request):
