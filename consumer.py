@@ -1,22 +1,20 @@
 import argparse
+import boto3
 
 def create_request(widget_details, storage):
-    if 'bucket' in storage:
-        # add to s3 bucket
-        print(storage)
+    if 's3' in storage:
+        s3 = boto3.client('s3')
+        print(f"Adding to S3 bucket: {widget_details}")
     elif storage == 'dynamodb':
-        # add to dynamo db
-        print(storage)
-
-
+        print(f"Adding to DynamoDB: {widget_details}")
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--storage', choices=['bucket2', 'bucket3' 'dynamodb'], required=True, help="Specify storage target: s3 (bucket2 or bucket3) or dynamodb")
+    parser.add_argument('--input', required=True, help="Specify a bucket to read widget requests from")
+    parser.add_argument('--storage', choices=['s3', 'dynamodb'], required=True, help="Specify storage target: s3 or dynamodb")
     args = parser.parse_args()
-    create_request("hello", args.storage)
-    print(args.storage)
+    create_request(args.input, args.storage)
+    print(f"Storage target: {args.storage}")
 
 if __name__ == "__main__":
     main()
-
