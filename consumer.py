@@ -11,8 +11,8 @@ class Consumer:
         self.bucket_input = bucket_input
         self.bucket_output = bucket_output
         self.dynamodb_table = dynamodb_table
-        self.s3 = boto3.client('s3')
-        self.dynamodb = boto3.resource('dynamodb')
+        self.s3 = boto3.client('s3', region_name='us-east-1')
+        self.dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
 
     def get_requests(self):
         response = self.s3.list_objects_v2(Bucket=self.bucket_input)
