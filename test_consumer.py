@@ -1,7 +1,6 @@
 import unittest
 import json
 from consumer import Consumer
-import tracemalloc
 
 class TestConsumer(unittest.TestCase):
 
