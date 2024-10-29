@@ -4,11 +4,17 @@ import boto3
 S3 = boto3.client('s3')
 
 def create_request(widget_details, storage):
-    if 's3' in storage:
-        s3 = boto3.client('s3')
-        print(f"Adding to S3 bucket: {widget_details}")
-    elif storage == 'dynamodb':
-        print(f"Adding to DynamoDB: {widget_details}")
+        widget_id = widget_request.get('widget_id')
+        owner = widget_request.get('owner')
+        widget_data = json.dumps(widget_request)
+
+        if args.store == 's3':
+            s3_key = f"widgets/{owner.replace(' ', '-').lower()}/{widget_id}"
+            self.s3.put_object(Bucket=self.bucket_output, Key=s3_key, Body=widget_data)
+            logging.info(f"Stored widget {widget_id} in S3 bucket {self.bucket_output} under key {s3_key}")
+        elif args.store == 'dynamodb':
+            self.store_in_dynamodb(widget_request)
+            logging.info(f"Stored widget {widget_id} in DynamoDB table {self.dynamodb_table}")
         
 def get_requests(input_bucket):
     response = S3.list_objects_v2(Bucket=input_bucket)
@@ -31,7 +37,8 @@ def run(storage, input_bucket):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--input', required=True, help="Specify a bucket to read widget requests from")
-    parser.add_argument('--storage', choices=['s3', 'dynamodb'], required=True, help="Specify storage target: s3 or dynamodb")
+    parser.add_argument('--s3', required=False, help="Specify storage target: s3")
+    parser.add_argument('--dynamodb', required=False, help="Specify storage target: dynamodb")
     args = parser.parse_args()
     print(args)
     run(args.storage, args.input)
