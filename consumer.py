@@ -1,7 +1,7 @@
 import argparse
 
 def create_request(widget_details, storage):
-    if storage == 's3':
+    if 'bucket' in storage:
         # add to s3 bucket
         print(storage)
     elif storage == 'dynamodb':
@@ -12,7 +12,7 @@ def create_request(widget_details, storage):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--storage', choices=['s3', 'dynamodb'], required=True, help="Specify storage target: s3 or dynamodb")
+    parser.add_argument('--storage', choices=['bucket2', 'bucket3' 'dynamodb'], required=True, help="Specify storage target: s3 (bucket2 or bucket3) or dynamodb")
     args = parser.parse_args()
     create_request("hello", args.storage)
     print(args.storage)
